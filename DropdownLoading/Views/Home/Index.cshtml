@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Province>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col-3">
+        <select class="form-control" id="Province" onchange="changeCities()">
+            <option value="-1">Please Select Province</option>
+            @foreach (var item in Model)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-3">
+        <select class="form-control" id="Cities">
+            <option value="-1">Please Select City</option>
+        </select>
+    </div>
+    <div class="col-3">
+        <select class="form-control">
+            <option>Please Select</option>
+        </select>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+        function changeCities() {
+            debugger;
+            var provinceId = $('#Province').val();
+            if (provinceId && provinceId != -1) {
+
+                $.ajax({
+
+                    url: '/Home/GetCities/' + provinceId,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#Cities').html(data);
+                    },
+                    error: function (request, error) {
+                        alert("Error");
+                    }
+                });
+
+             }else{
+                $('#Cities').html('<option value="-1">Please Select City</option>');
+             }
+        }
+
+    </script>
+}
